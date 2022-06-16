@@ -1,0 +1,73 @@
+div.form1 {
+  display: block;
+  text-align: center;
+}
+form1 {
+  display: inline-block;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: left;
+  margin-top: 8%;
+}
+
+formt {
+  display: inline-block;
+  background: #f3f3f3;
+  border: 2px solid #ddd;
+  border-radius: 3px;
+  padding: 2rem;
+  margin: 2rem 0 1rem 0;
+}
+
+formt label {
+  float: left;
+  font-size: 2rem;
+  margin: 0;
+  padding: 0;
+}
+
+input-t {
+  width: 25rem;
+  padding: 0.5rem;
+  border-radius: 15px;
+  outline: none;
+  border: none;
+}
+
+#sub_btn {
+  display: block;
+  width: 100%;
+  padding: 1rem;
+  border: none;
+  background: #222;
+  color: #fff;
+  border-radius: 3px;
+}
+
+#sub_btn:hover {
+  background: #333;
+  transition: all 0.5s;
+}
+
+footer p {
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+/***    Register Page     ***/
+#checkbox {
+  width: 1rem;
+}
+
+form span {
+  font-size: 0.8rem;
+}
+
+#reset_pass_lbl {
+  float: left;
+}
+
+/***    Home Page     ***/
+.home-page-title {
+  color: #222;
+}

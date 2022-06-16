@@ -1,0 +1,5 @@
+.parent {
+  position: absolute;
+
+  transform: translate(-20%, -20%);
+}
