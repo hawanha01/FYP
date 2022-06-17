@@ -1,120 +1,61 @@
 import React,{useEffect,useState} from 'react';
 import * as fs from 'fs';
 import './FormSample.css';
-
+import { TextField } from '@material-ui/core';
+import { BrowserRouter as Router, Switch, Route ,useHistory} from 'react-router-dom';
+import EditForm from '../LabManagment/EditForm/EditForm.js';
+import axios from 'axios';
+import { Formik } from 'formik'
 class FormSample extends React.Component {
-
-  constructor(props) {
-    super(props);
-    this.state = {
-      tname: '',
-      testprice: '',
-      Category: '',
-      description: '',
-      data: []
-    };
-  }
-
-  handleFormSubmit(event) {
-    var fs = require('browserify-fs');
-    event.preventDefault();
-    let items = [...this.state.data];
-    items.push({
-      tname: this.state.tname,
-      testprice: this.state.testprice,
-      Category: this.state.Category,
-      description: this.state.description
-    });
-    this.setState({
-      items
-      // tname:'',
-      // testprice:'',
-      // Category:'',
-      // description:'',
-    });
-    // console.log(this.state);
-    // console.log(items);
-
-    fs.writeFile('./data.js', items, function(err) {
-      if (err) console.log(err);
-      else console.log('success');
-    });
-
-    // Reading data from the 'file.txt' file
-
-    fs.readFile('./data.js', (err, items) => {
-      // error handling using throw
-      if (err) throw err;
-      // showing fetched data from the file onto the console
-      console.log(items.toString());
-    });
-  }
-
-
 
   render() {
     return (
       <div className="form1 formt ">
         <div className="pt-5 mt-5">
-          <form action="#">
+        <Formik initialValues={{ name: "", category: "", description: "" }}
+          onSubmit={(data) => {
+            // setSubmitting(true)
+            console.log(data)
+            axios.post("http://localhost:5000/TestPage", data, {
+              headers:{"Authorization" : `${localStorage.getItem("token")}`}
+            })
+              .then((response) => {
+                console.log(response.data.success)
+                if (response.data.success){
+                  console.log("in if",this.props.history.push)
+
+
+                  this.props.history.push("/profile")
+                }
+                console.log("Data has been retreived the server");
+              })
+              .catch(() => {
+                console.log("Internal server error");
+              });
+            // setSubmitting(false)
+          }}>
+          {({ values, isSubmitting, handleChange, handleBlur, handleSubmit }) => (
+            <form onSubmit={handleSubmit}>
             <label className="fs-4">Test name</label>
             <br />
-            <input
-              className="fs-4"
-              type="text"
-              id="tname"
-              name="firstname"
-              placeholder="Test name..."
-              value={this.state.tname}
-              onChange={e => this.setState({ tname: e.target.value })}
-            />
-            <br />
-            <label className="fs-4">Test Price</label>
-            <br />
-            <input
-              className="fs-4"
-              type="text"
-              id="testprice"
-              name="lastname"
-              placeholder="Enter Price"
-              value={this.state.testprice}
-              onChange={e => this.setState({ testprice: e.target.value })}
-            />
+            <TextField name="name" value={values.name} onChange={handleChange} onBlur={handleBlur} required />
             <br />
             <label className="fs-4">Category</label>
             <br />
-            <input
-              className="fs-4"
-              type="Category"
-              id="Category"
-              name="Category"
-              placeholder="Category"
-              value={this.state.Category}
-              onChange={e => this.setState({ Category: e.target.value })}
-            />
+            <TextField name="category" value={values.category} onChange={handleChange} onBlur={handleBlur} required />
             <br />
             <label className="fs-4">description</label>
             <br />
-            <textarea
-              className="fs-4"
-              id="description"
-              name="description"
-              placeholder="write..."
-              value={this.state.description}
-              onChange={e => this.setState({ description: e.target.value })}
-            />
+            <TextField name="description" value={values.description} onChange={handleChange} onBlur={handleBlur} required />
             <br />
             <div className="pt-5 mt-5">
-              <input
-                className="fs-4 btn-primary"
-                type="submit"
-                value="Add Test"
-                onClick={e => this.handleFormSubmit(e)}
-              />
+              <button className="fs-4 btn-primary" type="submit"> Add Test </button>
             </div>
 
             <br />
-          </form>
+            </form>
+          )}
+        </Formik>
         </div>
       </div>
     );

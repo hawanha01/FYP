@@ -61,14 +61,13 @@ import { Button } from 'bootstrap';
 const EditForm = () => {
   const [data, setData] = useState({ hits: [] });
   const [query, setQuery] = useState('redux');
-  const [backendData, setBackendData] = useState([]);
+  const [user, setUser] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
       const result = await axios(
         'https://hn.algolia.com/api/v1/search?query=diseases'
       );
-
       setData(result.data);
     };
 
@@ -76,15 +75,17 @@ const EditForm = () => {
     axios({
       url: "http://localhost:5000/profile",
       method: "GET",
+      headers:{"Authorization" : `${localStorage.getItem("token")}`}
     })
       .then((response) => {
-        console.log("Data has been retreived the server");
-        setBackendData(response["data"]);
+        if (response.data.success){
+          setUser(response.data.users)
+          console.log("Data has been retreived the server");
+        }
       })
       .catch(() => {
         console.log("Internal server error");
       });
-
   }, []);
 
   return (
@@ -252,11 +253,11 @@ const EditForm = () => {
 
       <ol className="rounded-list">
         <ul>
-        {(typeof backendData.tests === 'undefined') ? (
+        {(typeof user.tests === 'undefined') ? (
           <p>Loading...</p>
         ): (
-          backendData.tests.map((test,i) =>(
-            <li key={i}><a href="#">{test}</a></li>
+          user.tests.map((test,i) =>(
+            <li key={i}><a href="#">{test.name}</a></li>
           ))
         )}
         </ul>

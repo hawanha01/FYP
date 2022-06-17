@@ -1,12 +1,17 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import { Link } from 'react-router-dom';
 import { Formik } from 'formik'
 import './RegisterPage.css';
+
 import { TextField } from '@material-ui/core';
+import { Redirect } from 'react-router';
 import axios from 'axios';
 import '../../App.css';
-
 export default function SignUpPage() {
+  const [isSignup, setIsSignup] = useState(false)
+  if (isSignup) {
+    return <Redirect to = {{ pathname: "/login" }} />;
+  }
   return (
     <div className="text-center m-5-auto parent2">
       <h2 className="fs-3">Join us</h2>
@@ -14,21 +19,11 @@ export default function SignUpPage() {
       <Formik initialValues={{ username: "", email: "", password: "" }}
       onSubmit={(data) => {
         // setSubmitting(true)
-        const obj = {
-          username: data.username,
-          email: data.email,
-          password: data.password,
-        }
-        console.log(obj);
-
-        axios({
-          url: "http://localhost:5000/register",
-          method: "POST",
-          body: {firstname: "bilal"},
-        })
+        console.log(data)
+        axios.post("http://localhost:5000/register", data )
           .then((response) => {
             console.log("Data has been retreived the server");
-            console.log(response);
+            setIsSignup(true)
           })
           .catch(() => {
             console.log("Internal server error");
